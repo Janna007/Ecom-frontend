@@ -22,9 +22,6 @@
     # Copy package.json and package-lock.json (or yarn.lock) to leverage Docker cache
     COPY --from=builder /app/dist /usr/share/nginx/html
 
-    # Install dependencies
-    RUN npm install
-
     # Copy the rest of the application code
     EXPOSE 5173
 
