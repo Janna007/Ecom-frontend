@@ -4,10 +4,14 @@ import { router } from './router'
 import { RouterProvider } from 'react-router-dom'
 import 'antd/dist/reset.css'
 import { ConfigProvider } from 'antd'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ConfigProvider
+     <QueryClientProvider client={queryClient}>
+     <ConfigProvider
       theme={
         {
           token:{
@@ -17,8 +21,9 @@ createRoot(document.getElementById('root')!).render(
         }
       }
     >
-     
     <RouterProvider router={router} />
     </ConfigProvider>
+    </QueryClientProvider>
+  
   </StrictMode>,
 )
