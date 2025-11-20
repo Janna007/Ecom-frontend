@@ -1,14 +1,42 @@
-import { Button, Card, Checkbox, Flex, Form, Input, Layout, Space } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Flex,
+  Form,
+  Input,
+  Layout,
+  Space,
+} from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import logo from "../../assets/logo-pizza.svg";
-
-type FieldType = {
-  email?: string;
-  password?: string;
-  remember?: string;
-};
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../http/api";
+import type { FieldType } from "../../types";
 
 function Login() {
+  const loginUser = async (credentials: FieldType) => {
+    //server call logic
+    const data= login(credentials); 
+    return data
+  };
+
+  const { data,error, isError, isPending, mutate } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: loginUser,
+    
+    onSuccess: () => {
+      console.log("Logged in successfully!", data);
+    },
+
+    onError: (err: any) => {
+      console.log("Login error:", err?.message);
+    },
+  });
+
+  // console.log(isError)
+  // console.log("err.messge",error?.message)
   return (
     <Layout
       style={{
@@ -19,11 +47,9 @@ function Login() {
       }}
     >
       <Space direction="vertical">
-        <Layout.Content
-          style={{ display: "flex", justifyContent: "center", gap: 30 }}
-        >
-          <h1>ovion</h1>
+        <Layout.Content style={{ display: "flex", justifyContent: "center" }}>
           <img src={logo} style={{ width: 35, height: 35 }} alt="logo" />
+          <h1>ovion</h1>
         </Layout.Content>
 
         <Card
@@ -47,7 +73,20 @@ function Login() {
             </Space>
           }
         >
-          <Form initialValues={{ remember: true }}>
+          {isError && (
+            <Alert
+              message={error.message}
+              type="error"
+              style={{ marginBottom: 10 }}
+            />
+          )}
+          <Form
+            initialValues={{ remember: true }}
+            onFinish={(values) => {
+              mutate({ email: values.email, password: values.password });
+              console.log(values)
+            }}
+          >
             <Form.Item<FieldType>
               name="email"
               rules={[
@@ -81,13 +120,15 @@ function Login() {
 
             <Form.Item
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
                 width: "100%",
               }}
             >
-              <Button type="primary" htmlType="submit">
+              <Button
+                style={{ width: "100%" }}
+                type="primary"
+                htmlType="submit"
+                loading={isPending}
+              >
                 Log In
               </Button>
             </Form.Item>
