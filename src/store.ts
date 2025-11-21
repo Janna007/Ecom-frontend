@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 
-interface User {
+export interface User {
     id:number; 
     firstName:string
     lastName:string
@@ -19,7 +19,6 @@ interface AuthUser {
 
 export const userAuth = create<AuthUser>()(
   devtools(
-   
       (set) => ({
         user: null,
         setUser: (user) => set({ user }),
