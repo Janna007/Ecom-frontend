@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { createJSONStorage, devtools, persist } from 'zustand/middleware'
 
 
 export interface User {
@@ -19,11 +19,16 @@ interface AuthUser {
 
 export const userAuth = create<AuthUser>()(
   devtools(
+    persist(
       (set) => ({
         user: null,
         setUser: (user) => set({ user }),
         logOut: () => set({ user: null }),
       }),
-
+      {
+        name: 'user-storage', // name of the item in the storage (must be unique)
+        storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      }
+    )
   )
 )
