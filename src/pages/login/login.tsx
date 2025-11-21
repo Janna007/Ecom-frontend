@@ -53,6 +53,9 @@ function Login() {
     mutationFn: logout,
     onSuccess:async()=>{
       console.log("succesfully logged out")
+       //reset store
+       logOut()
+       return
     }   
   })
    
@@ -75,10 +78,7 @@ function Login() {
       if(!isAllowed(userData.data)){
         //clear cookies
         logoutMutation()
-        //reset store
-        logOut()
         return
-
       }
       
       // if(userData.data.role === 'customer'){

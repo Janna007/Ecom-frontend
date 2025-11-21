@@ -1,8 +1,30 @@
 import { createBrowserRouter } from "react-router-dom"
-import Dashboard from "./pages/Dashboard";
+// import Dashboard from "./pages/Dashboard";
 import Login from "./pages/login/login";
+import Auth from "./layout/Auth";
+import HomePage from "./pages/HomePage";
+import NonAuth from "./layout/NonAuth";
+
 
 export const router=createBrowserRouter([
-    { path: "/", Component:Login },
-    {path:"/dashboard",Component:Dashboard}
+    {
+       path:'/',
+       Component:Auth,
+       children:[
+        {
+            index:true,
+            Component:HomePage
+        }
+       ]
+    },{
+
+        path:'auth',
+        Component:NonAuth,
+       children:[
+        {
+            path:'login',
+            Component: Login
+        }
+       ]
+    },
 ])
