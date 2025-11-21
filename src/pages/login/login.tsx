@@ -11,23 +11,90 @@ import {
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import logo from "../../assets/logo-pizza.svg";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "../../http/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {  getSelf, login, logoutUser } from "../../http/api";
 import type { FieldType } from "../../types";
+import { userAuth } from "../../store";
+import { usePermissions } from "../../hooks/usePermissions";
+
+const loginUser = async (credentials: FieldType) => {
+  //server call logic
+  const data= login(credentials); 
+  return data
+};
+
+const getUser=async()=>{
+  //server call api
+  const {data}= await getSelf()
+  return data
+}
+
+const logout=async()=>{
+  return await logoutUser()
+}
+
 
 function Login() {
-  const loginUser = async (credentials: FieldType) => {
-    //server call logic
-    const data= login(credentials); 
-    return data
-  };
+  //hooks
+  const {setUser,logOut}=userAuth()
+  const {isAllowed}=usePermissions()
 
-  const { data,error, isError, isPending, mutate } = useMutation({
+  //getuser
+  const {refetch:fetchUser }=useQuery({
+      queryKey:["user"],
+      queryFn: getUser,
+      enabled:false, 
+  })
+
+  //logout user
+
+  const {mutate:logoutMutation}=useMutation({
+    mutationKey:["logout"],
+    mutationFn: logout,
+    onSuccess:async()=>{
+      console.log("succesfully logged out")
+       //reset store
+       logOut()
+       return
+    }   
+  })
+   
+  //login user
+  const { error, isError, isPending, mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     
-    onSuccess: () => {
-      console.log("Logged in successfully!", data);
+    onSuccess: async() => {
+      //call getself api to get details
+      const userData=await fetchUser()
+      console.log("user",userData.data)
+      
+      //logout or redirect to client ui
+      //here add logout
+      
+      //if the user role is customer then logout
+      //only admin and manager can access
+
+      if(!isAllowed(userData.data)){
+        //clear cookies
+        logoutMutation()
+        return
+      }
+      
+      // if(userData.data.role === 'customer'){
+
+      //      //clear cookies
+  
+      //      await logoutUser()
+      //      //reset store
+      //    logOut()
+      //    return
+      // }
+
+
+      //store userdata in zustand store
+       setUser(userData.data)
+      // console.log("Logged in successfully!", res.data.id);
     },
 
     onError: (err: any) => {
@@ -35,8 +102,7 @@ function Login() {
     },
   });
 
-  // console.log(isError)
-  // console.log("err.messge",error?.message)
+
   return (
     <Layout
       style={{

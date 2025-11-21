@@ -3,3 +3,14 @@ export type FieldType = {
     password: string;
     remember?: string;
   };
+
+
+
+export type user={
+    id:number; 
+    firstName:string
+    lastName:string
+    email:string
+    role:string
+  
+}
