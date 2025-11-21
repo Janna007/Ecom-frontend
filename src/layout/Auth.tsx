@@ -4,7 +4,6 @@ import { Navigate, Outlet } from "react-router-dom"
 import { userAuth } from "../store"
 
 function Auth() {
-
     const {user} =userAuth()
     if(user === null){
         return <Navigate to={'/auth/login'} replace={true} />
