@@ -11,23 +11,46 @@ import {
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import logo from "../../assets/logo-pizza.svg";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "../../http/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {  getSelf, login } from "../../http/api";
 import type { FieldType } from "../../types";
+import { userAuth } from "../../store";
 
 function Login() {
+
+  const {setUser}=userAuth()
+  
   const loginUser = async (credentials: FieldType) => {
     //server call logic
     const data= login(credentials); 
     return data
   };
 
-  const { data,error, isError, isPending, mutate } = useMutation({
+  const getUser=async()=>{
+    //server call api
+    const {data}= await getSelf()
+    return data
+  }
+
+  
+  const {data:user,refetch:fetchUser }=useQuery({
+      queryKey:["user"],
+      queryFn: getUser,
+      enabled:false, 
+  })
+   
+  const { error, isError, isPending, mutate } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     
-    onSuccess: () => {
-      console.log("Logged in successfully!", data);
+    onSuccess: async() => {
+      //call getself api to get details
+      const userData=await fetchUser()
+      console.log("user",userData.data)
+
+      setUser(userData.data)
+     
+      // console.log("Logged in successfully!", res.data.id);
     },
 
     onError: (err: any) => {
