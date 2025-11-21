@@ -1,30 +1,35 @@
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter } from "react-router-dom";
 // import Dashboard from "./pages/Dashboard";
 import Login from "./pages/login/login";
 import Auth from "./layout/Auth";
 import HomePage from "./pages/HomePage";
 import NonAuth from "./layout/NonAuth";
+import Root from "./layout/Root";
 
-
-export const router=createBrowserRouter([
-    {
-       path:'/',
-       Component:Auth,
-       children:[
-        {
-            index:true,
-            Component:HomePage
-        }
-       ]
-    },{
-
-        path:'auth',
-        Component:NonAuth,
-       children:[
-        {
-            path:'login',
-            Component: Login
-        }
-       ]
-    },
-])
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Root,
+    children: [
+      {
+        Component: Auth,
+        children: [
+          {
+            index: true,
+            Component: HomePage,
+          },
+        ],
+      },
+      {
+        path: "auth",
+        Component: NonAuth,
+        children: [
+          {
+            path: "login",
+            Component: Login,
+          },
+        ],
+      },
+    ],
+  },
+]);
