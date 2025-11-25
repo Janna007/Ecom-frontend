@@ -12,26 +12,11 @@ import {
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import logo from "../../assets/logo-pizza.svg";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {  getSelf, login, logoutUser } from "../../http/api";
 import type { FieldType } from "../../types";
 import { userAuth } from "../../store";
 import { usePermissions } from "../../hooks/usePermissions";
-
-const loginUser = async (credentials: FieldType) => {
-  //server call logic
-  const data= login(credentials); 
-  return data
-};
-
-const getUser=async()=>{
-  //server call api
-  const {data}= await getSelf()
-  return data
-}
-
-const logout=async()=>{
-  return await logoutUser()
-}
+import { getUser } from "../../http/queries";
+import { loginUser, logout } from "../../http/mutations";
 
 
 function Login() {
