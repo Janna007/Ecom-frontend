@@ -83,6 +83,7 @@ function Auth() {
   return (
     <div>
       <Layout style={{ minHeight: "100vh" }}>
+        {/* sider bar */}
         <Sider
           theme="light"
           collapsible
@@ -110,6 +111,8 @@ function Auth() {
           />
         </Sider>
         <Layout>
+
+          {/* hedaer */}
           <Header style={{ padding: 0, background: colorBgContainer }}>
             <Flex gap="middle" align="start" justify="space-between">
               <div
@@ -133,7 +136,7 @@ function Auth() {
                     padding: 10,
                   }}
                 >
-                  Bangalore,Karnataka
+                  {user.role==='admin' ? "Global":user.tenant.address}
                 </p>
               </div>
               <Space size={16} style={{marginRight:'20px'}}>
@@ -162,6 +165,8 @@ function Auth() {
               </Space>
             </Flex>
           </Header>
+
+          {/* page contents */}
           <Content style={{ margin: "0 16px" }}>
             {/* <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'User' }, { title: 'Bill' }]} /> */}
             <div
@@ -173,6 +178,8 @@ function Auth() {
               <Outlet />
             </div>
           </Content>
+
+          {/* //footer */}
           <Footer style={{ textAlign: "center" }}>
             Pizza Delivery App by jannakondeth
           </Footer>
