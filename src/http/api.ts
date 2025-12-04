@@ -11,3 +11,4 @@ export const getSelf = () =>
 
 export const logoutUser=()=>api.post('/auth/logout')
    
+export const getUsers=({params}:any)=>api.get('/users/',{params})
