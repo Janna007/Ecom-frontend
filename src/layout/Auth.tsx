@@ -26,33 +26,48 @@ import { logout } from "../http/mutations";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  {
-    key: "/",
-    icon: <Icon component={Home} />,
-    label: <NavLink to="/">Home</NavLink>,
-  },
-  {
-    key: "/users",
-    icon: <Icon component={UserIcon} />,
-    label: <NavLink to="/users">Users</NavLink>,
-  },
-  {
-    key: "/restaurants",
-    icon: <Icon component={foodIcon} />,
-    label: <NavLink to="/restaurants">Restaurants</NavLink>,
-  },
-  {
-    key: "/products",
-    icon: <Icon component={BasketIcon} />,
-    label: <NavLink to="/products">Products</NavLink>,
-  },
-  {
-    key: "/promos",
-    icon: <Icon component={GiftIcon} />,
-    label: <NavLink to="/promos">Promos</NavLink>,
-  },
-];
+
+const getItems=(role:string)=>{
+  const baseItems=[
+    {
+      key: "/",
+      icon: <Icon component={Home} />,
+      label: <NavLink to="/">Home</NavLink>,
+    },
+    {
+      key: "/restaurants",
+      icon: <Icon component={foodIcon} />,
+      label: <NavLink to="/restaurants">Restaurants</NavLink>,
+    },
+    {
+      key: "/products",
+      icon: <Icon component={BasketIcon} />,
+      label: <NavLink to="/products">Products</NavLink>,
+    },
+    {
+      key: "/promos",
+      icon: <Icon component={GiftIcon} />,
+      label: <NavLink to="/promos">Promos</NavLink>,
+    },
+  ]
+
+
+  if(role==='admin'){
+    return [...baseItems,{
+      
+        key: "/users",
+        icon: <Icon component={UserIcon} />,
+        label: <NavLink to="/users">Users</NavLink>,
+      
+    }]
+  }else{
+    return baseItems
+  }
+
+
+}
+
+
 
 
 
@@ -75,10 +90,12 @@ function Auth() {
       return
     }   
   })
+
   
   if (user === null) {
     return <Navigate to={"/auth/login"} replace={true} />;
   }
+  const items=getItems(user.role)
  
   return (
     <div>
@@ -136,7 +153,7 @@ function Auth() {
                     padding: 10,
                   }}
                 >
-                  {user?.role==='admin' ? "Global":user?.tenant.address}
+                  {user?.role==='admin' ? "Global":user?.tenant?.address}
                 </p>
               </div>
               <Space size={16} style={{marginRight:'20px'}}>

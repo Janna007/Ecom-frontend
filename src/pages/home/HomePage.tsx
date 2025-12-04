@@ -1,5 +1,5 @@
 import { Card, Flex, theme } from "antd";
-import { userAuth } from "../store";
+import { userAuth } from "../../store";
 import { BarChartOutlined, GiftFilled } from '@ant-design/icons';
 
 
