@@ -136,7 +136,7 @@ function Auth() {
                     padding: 10,
                   }}
                 >
-                  {user.role==='admin' ? "Global":user.tenant.address}
+                  {user?.role==='admin' ? "Global":user?.tenant.address}
                 </p>
               </div>
               <Space size={16} style={{marginRight:'20px'}}>
